@@ -1,0 +1,192 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_SIZE 100
+
+// Structure for a node in the linked list implementation
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Structure for stack using linked list
+struct StackLinkedList {
+    struct Node* top;
+};
+
+// Function to initialize stack using linked list
+void initStackLinkedList(struct StackLinkedList* stack) {
+    stack->top = NULL;
+}
+
+// Function to check if the stack using linked list is empty
+int isEmptyLinkedList(struct StackLinkedList stack) {
+    return (stack.top == NULL);
+}
+
+// Function to push an element into the stack using linked list
+void pushLinkedList(struct StackLinkedList* stack, int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = stack->top;
+    stack->top = newNode;
+}
+
+// Function to pop an element from the stack using linked list
+int popLinkedList(struct StackLinkedList* stack) {
+    if (isEmptyLinkedList(*stack)) {
+        printf("Error: Stack underflow\n");
+        return -1;
+    }
+    struct Node* temp = stack->top;
+    int poppedValue = temp->data;
+    stack->top = temp->next;
+    free(temp);
+    return poppedValue;
+}
+
+// Function to return the top element from the stack using linked list
+int topLinkedList(struct StackLinkedList stack) {
+    if (isEmptyLinkedList(stack)) {
+        printf("Error: Stack is empty\n");
+        return -1;
+    }
+    return stack.top->data;
+}
+
+// Function to display elements in the stack using linked list
+void displayLinkedList(struct StackLinkedList stack) {
+    if (isEmptyLinkedList(stack)) {
+        printf("Stack is empty\n");
+        return;
+    }
+    printf("Elements in the stack: ");
+    struct Node* temp = stack.top;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+// Structure for stack using array
+struct StackArray {
+    int items[MAX_SIZE];
+    int top;
+};
+
+// Function to initialize stack using array
+void initStackArray(struct StackArray* stack) {
+    stack->top = -1;
+}
+
+// Function to check if the stack using array is empty
+int isEmptyArray(struct StackArray stack) {
+    return (stack.top == -1);
+}
+
+// Function to check if the stack using array is full
+int isFullArray(struct StackArray stack) {
+    return (stack.top == MAX_SIZE - 1);
+}
+
+// Function to push an element into the stack using array
+void pushArray(struct StackArray* stack, int value) {
+    if (isFullArray(*stack)) {
+        printf("Error: Stack overflow\n");
+        return;
+    }
+    stack->items[++stack->top] = value;
+}
+
+// Function to pop an element from the stack using array
+int popArray(struct StackArray* stack) {
+    if (isEmptyArray(*stack)) {
+        printf("Error: Stack underflow\n");
+        return -1;
+    }
+    return stack->items[stack->top--];
+}
+
+// Function to return the top element from the stack using array
+int topArray(struct StackArray stack) {
+    if (isEmptyArray(stack)) {
+        printf("Error: Stack is empty\n");
+        return -1;
+    }
+    return stack.items[stack.top];
+}
+
+// Function to display elements in the stack using array
+void displayArray(struct StackArray stack) {
+    if (isEmptyArray(stack)) {
+        printf("Stack is empty\n");
+        return;
+    }
+    printf("Elements in the stack: ");
+    for (int i = 0; i <= stack.top; i++) {
+        printf("%d ", stack.items[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int choice, element;
+    struct StackArray stackArray;
+    struct StackLinkedList stackLinkedList;
+    initStackArray(&stackArray);
+    initStackLinkedList(&stackLinkedList);
+
+    do {
+        printf("\nStack Operations Menu:\n");
+        printf("1. Push (Array)\n");
+        printf("2. Pop (Array)\n");
+        printf("3. Top (Array)\n");
+        printf("4. Display (Array)\n");
+        printf("5. Push (Linked List)\n");
+        printf("6. Pop (Linked List)\n");
+        printf("7. Top (Linked List)\n");
+        printf("8. Display (Linked List)\n");
+        printf("9. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter element to push (Array): ");
+                scanf("%d", &element);
+                pushArray(&stackArray, element);
+                break;
+            case 2:
+                printf("Popped element (Array): %d\n", popArray(&stackArray));
+                break;
+            case 3:
+                printf("Top element (Array): %d\n", topArray(stackArray));
+                break;
+            case 4:
+                displayArray(stackArray);
+                break;
+            case 5:
+                printf("Enter element to push (Linked List): ");
+                scanf("%d", &element);
+                pushLinkedList(&stackLinkedList, element);
+                break;
+            case 6:
+                printf("Popped element (Linked List): %d\n", popLinkedList(&stackLinkedList));
+                break;
+            case 7:
+                printf("Top element (Linked List): %d\n", topLinkedList(stackLinkedList));
+                break;
+            case 8:
+                displayLinkedList(stackLinkedList);
+                break;
+            case 9:
+                printf("Exiting...\n");
+                break;
+            default:
+                printf("Invalid choice\n");
+        }
+    } while (choice != 9);
+
+    return 0;
+}
